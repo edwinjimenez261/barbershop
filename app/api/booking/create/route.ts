@@ -3,7 +3,29 @@ import { z } from 'zod';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createDepositPaymentIntent } from '@/lib/stripe/connect';
 import { notify } from '@/lib/notify';
-import { resolveTenantByHost } from '@/lib/tenant';
+import { parseHost } from '@/lib/tenant-host';
+import { mockTenant } from '@/lib/mock-data';
+import type { Tenant } from '@/lib/types/database';
+
+async function resolveTenant(host: string): Promise<Tenant | null> {
+  const usingMock =
+    process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true' ||
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (usingMock) return mockTenant;
+  const { rootHost } = parseHost(host);
+  try {
+    const supabase = createSupabaseAdminClient();
+    const { data } = await supabase
+      .from('tenants')
+      .select('*')
+      .eq('custom_domain', rootHost)
+      .maybeSingle();
+    return (data as Tenant | null) ?? null;
+  } catch {
+    return null;
+  }
+}
 
 const Body = z.object({
   barberId: z.string().uuid(),
@@ -26,10 +48,13 @@ export async function POST(req: NextRequest) {
   }
 
   const host = req.headers.get('host') ?? '';
-  const { tenant } = await resolveTenantByHost(host);
+  const tenant = await resolveTenant(host);
   if (!tenant) return NextResponse.json({ error: 'tenant_not_found' }, { status: 404 });
 
-  const usingMock = process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true';
+  const usingMock =
+    process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true' ||
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (usingMock) {
     // Just return success without persisting; the UI handles it.
