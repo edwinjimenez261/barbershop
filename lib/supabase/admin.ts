@@ -1,0 +1,20 @@
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/lib/types/database';
+
+/**
+ * Admin client — uses the service role key, bypasses RLS.
+ * Only call from server-side code (route handlers, server actions, webhooks).
+ * NEVER expose this to the browser.
+ */
+export function createSupabaseAdminClient() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set');
+  }
+  return createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    {
+      auth: { persistSession: false, autoRefreshToken: false },
+    },
+  );
+}

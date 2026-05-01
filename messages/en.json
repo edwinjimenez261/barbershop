@@ -1,0 +1,214 @@
+{
+  "common": {
+    "appName": "getbarber.app",
+    "back": "Back",
+    "next": "Next",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "minutes": "min",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "open": "Open",
+    "closed": "Closed",
+    "spanish": "Español",
+    "english": "English"
+  },
+  "landing": {
+    "kicker": "Est. 2018 · Newark, NJ",
+    "heroTitle": "The art of a",
+    "heroTitleAccent": "great cut",
+    "heroSubtitle": "Four master barbers. Classic cuts, modern fades, and the best beard work in Newark.",
+    "ctaBook": "Book my appointment",
+    "openNow": "Open now · closes {time}",
+    "scrollHint": "Meet the shop",
+    "stats": {
+      "rating": "Rating",
+      "reviews": "Reviews",
+      "daysWeek": "Days/wk"
+    },
+    "team": {
+      "kicker": "The team",
+      "title": "Master",
+      "titleAccent": "barbers",
+      "subtitle": "Each with their own style. Pick your favorite or let us match you.",
+      "book": "Book"
+    },
+    "services": {
+      "kicker": "Menu",
+      "title": "Services &",
+      "titleAccent": "prices",
+      "subtitle": "Prices «from» — vary by barber."
+    },
+    "gallery": {
+      "kicker": "Recent work",
+      "title": "Gallery",
+      "more": "More on Instagram"
+    },
+    "reviews": {
+      "kicker": "What they say",
+      "title": "Real",
+      "titleAccent": "reviews",
+      "googleHint": "{count} reviews on Google",
+      "attendedBy": "With {name}"
+    },
+    "visit": {
+      "kicker": "Visit us",
+      "title": "We're in",
+      "titleAccent": "Newark",
+      "call": "Call",
+      "directions": "Directions",
+      "hours": "Hours"
+    },
+    "finalCta": {
+      "title": "Ready for your",
+      "titleAccent": "next cut?",
+      "subtitle": "Book online in under a minute. Instant SMS confirmation."
+    }
+  },
+  "booking": {
+    "step": "Step {current} of {total}",
+    "barbero": {
+      "title": "Choose your barber",
+      "rating": "{rating} · {count} reviews"
+    },
+    "servicio": {
+      "title": "Choose the service",
+      "minutes": "{n} min"
+    },
+    "horario": {
+      "title": "Pick day and time",
+      "timezoneHint": "Newark, NJ local time · Select an available slot"
+    },
+    "datos": {
+      "title": "Your details",
+      "name": "Full name",
+      "phone": "Phone",
+      "notes": "Notes for the barber (optional)",
+      "notesPh": "E.g.: «Same as last time, low fade»",
+      "consent": "Receive confirmation and reminders via SMS and WhatsApp",
+      "submit": "Continue to payment"
+    },
+    "pago": {
+      "title": "Deposit payment",
+      "summary": "Appointment summary",
+      "service": "Service: {name}",
+      "depositNow": "Deposit now ({pct}%)",
+      "remaining": "Rest at the shop",
+      "card": "Debit or credit card",
+      "secureBy": "Securely processed by Stripe · Direct payment to {name}",
+      "payAndBook": "Pay ${amount} and book",
+      "processing": "Processing…",
+      "noShowPolicy": "If you cancel with less than 2h notice, the deposit is non-refundable"
+    },
+    "confirmada": {
+      "kicker": "Booking confirmed",
+      "headline": "All set, {name}!",
+      "subhead": "Your booking is confirmed",
+      "fields": {
+        "date": "Date",
+        "time": "Time",
+        "duration": "Duration",
+        "deposit": "Deposit"
+      },
+      "depositPaid": "${amount} paid",
+      "addToCalendar": "Add to calendar",
+      "directions": "Directions",
+      "notice": "We sent your confirmation via SMS and WhatsApp. You'll get reminders 24h and 2h before.",
+      "backHome": "Back home"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in",
+      "subtitle": "Enter your email and we'll send you a magic link.",
+      "email": "Email",
+      "send": "Send link",
+      "sent": "Done. Check your email to sign in."
+    },
+    "signUp": {
+      "title": "Create account",
+      "subtitle": "For barbers and owners. Clients don't need an account to book."
+    }
+  },
+  "barberPortal": {
+    "tabs": {
+      "today": "Today",
+      "calendar": "Calendar",
+      "income": "Income",
+      "gallery": "Gallery",
+      "reviews": "Reviews"
+    },
+    "today": {
+      "title": "Your day",
+      "appointmentsCount": "{n, plural, =0 {no bookings} one {# booking} other {# bookings}}",
+      "next": "Next",
+      "ongoing": "In progress",
+      "completed": "Completed"
+    },
+    "income": {
+      "title": "Income",
+      "weekTotal": "This week",
+      "monthTotal": "This month",
+      "rentDue": "Booth rent due",
+      "nextPayout": "Next payout",
+      "stripeConnect": "Connected with Stripe",
+      "stripeNotConnected": "Connect your Stripe account to receive payments",
+      "connectAction": "Connect with Stripe"
+    },
+    "gallery": {
+      "title": "Your gallery",
+      "upload": "Upload photo",
+      "empty": "No photos yet. Upload your best cuts."
+    },
+    "reviews": {
+      "title": "Your reviews",
+      "average": "Average: {rating} from {count} reviews"
+    }
+  },
+  "ownerPortal": {
+    "tabs": {
+      "dashboard": "Dashboard",
+      "rentas": "Booth rental",
+      "calendar": "Calendar",
+      "barbers": "Barbers",
+      "messages": "Messages"
+    },
+    "dashboard": {
+      "title": "Global view",
+      "todayBookings": "Today's bookings",
+      "weekBookings": "Bookings this week",
+      "occupancy": "Occupancy",
+      "newClients": "New clients",
+      "topBarber": "Barber of the month"
+    },
+    "rentas": {
+      "title": "Booth rental",
+      "subtitle": "Auto-charge each barber · Stripe handles it",
+      "active": "Active",
+      "paused": "Paused",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "nextCharge": "Next charge: {date}",
+      "configure": "Configure"
+    },
+    "barbers": {
+      "title": "Your barbers",
+      "add": "Add barber",
+      "stripeOk": "Stripe connected",
+      "stripePending": "Stripe pending"
+    },
+    "messages": {
+      "title": "Message templates",
+      "subtitle": "Automated SMS and WhatsApp · ES + EN",
+      "approved": "Approved",
+      "pending": "Meta pending"
+    }
+  }
+}
