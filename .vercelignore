@@ -1,0 +1,4 @@
+# El sub-proyecto website/ es un Next.js standalone con su propio deploy.
+# Excluirlo aquí evita que Vercel lo intente buildear como parte del SaaS principal.
+website/
+demo/
