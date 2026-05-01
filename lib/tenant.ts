@@ -1,5 +1,4 @@
 import { headers } from 'next/headers';
-import { cache } from 'react';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { mockTenant, mockBarbers, mockServices, mockBarberServices, mockReviews } from '@/lib/mock-data';
 import type { Tenant, Barber, Service, BarberService, Review } from '@/lib/types/database';
@@ -11,6 +10,8 @@ export const TENANT_HOST_HEADER = 'x-tenant-host';
 export type Subportal = 'public' | 'admin' | 'barber';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true';
+
+type CachedResolution = { tenant: Tenant | null; subportal: Subportal; barberSlug: string | null };
 
 /**
  * Resolve a tenant by hostname (custom_domain) or by subdomain (admin.*, <barber>.*).
@@ -63,13 +64,11 @@ export async function resolveTenantByHost(
 }
 
 /**
- * Read the resolved tenant from middleware-set headers (cached per request).
+ * Read the resolved tenant from middleware-set headers.
+ * Next.js's request scope deduplicates DB queries from server components, so an
+ * explicit React `cache()` wrapper isn't strictly needed for the demo.
  */
-export const getCurrentTenant = cache(async (): Promise<{
-  tenant: Tenant | null;
-  subportal: Subportal;
-  barberSlug: string | null;
-}> => {
+export async function getCurrentTenant(): Promise<CachedResolution> {
   const h = headers();
   const tenantId = h.get(TENANT_HEADER);
   const subportal = (h.get(TENANT_SUBPORTAL_HEADER) ?? 'public') as Subportal;
@@ -80,18 +79,20 @@ export const getCurrentTenant = cache(async (): Promise<{
   }
 
   if (useMock) {
-    if (tenantId === mockTenant.id) return { tenant: mockTenant, subportal, barberSlug: parseBarberFromHost(host) };
+    if (tenantId === mockTenant.id) {
+      return { tenant: mockTenant, subportal, barberSlug: parseBarberFromHost(host) };
+    }
     return { tenant: null, subportal, barberSlug: null };
   }
 
   const supabase = createSupabaseAdminClient();
   const { data } = await supabase.from('tenants').select('*').eq('id', tenantId).maybeSingle();
   return {
-    tenant: (data as Tenant) ?? null,
+    tenant: (data as Tenant | null) ?? null,
     subportal,
     barberSlug: parseBarberFromHost(host),
   };
-});
+}
 
 function parseBarberFromHost(host: string): string | null {
   const parts = host.replace(/:\d+$/, '').split('.');

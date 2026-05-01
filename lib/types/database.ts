@@ -144,20 +144,34 @@ export interface Review {
   created_at: string;
 }
 
-// Minimal Database type for the supabase-js generic.
+// Database type for the supabase-js generic.
+// NOTE: regenerate with `supabase gen types typescript --project-id <ref>` once the
+// project is linked. Hand-written for now so typecheck passes without the CLI.
+
+type TableShape<T> = {
+  Row: T;
+  Insert: Partial<T>;
+  Update: Partial<T>;
+  Relationships: [];
+};
+
 export interface Database {
   public: {
     Tables: {
-      tenants:           { Row: Tenant;        Insert: Partial<Tenant>;        Update: Partial<Tenant> };
-      barbers:           { Row: Barber;        Insert: Partial<Barber>;        Update: Partial<Barber> };
-      services_catalog:  { Row: Service;       Insert: Partial<Service>;       Update: Partial<Service> };
-      barber_services:   { Row: BarberService; Insert: Partial<BarberService>; Update: Partial<BarberService> };
-      clients:           { Row: Client;        Insert: Partial<Client>;        Update: Partial<Client> };
-      appointments:      { Row: Appointment;   Insert: Partial<Appointment>;   Update: Partial<Appointment> };
-      reviews:           { Row: Review;        Insert: Partial<Review>;        Update: Partial<Review> };
+      tenants:            TableShape<Tenant>;
+      users:              TableShape<{ id: string; tenant_id: string | null; role: UserRole; email: string | null; full_name: string | null; phone: string | null; preferred_locale: Locale; created_at: string }>;
+      barbers:            TableShape<Barber>;
+      services_catalog:   TableShape<Service>;
+      barber_services:    TableShape<BarberService>;
+      clients:            TableShape<Client>;
+      appointments:       TableShape<Appointment>;
+      reviews:            TableShape<Review>;
+      messages_log:       TableShape<{ id: string; tenant_id: string; appointment_id: string | null; channel: MessageChannel; template: string; locale: Locale; to_number: string; status: MessageStatus; twilio_sid: string | null; error_message: string | null; payload: Json | null; sent_at: string }>;
+      payouts_log:        TableShape<{ id: string; barber_id: string; amount_cents: number; stripe_transfer_id: string | null; stripe_payment_intent_id: string | null; appointment_id: string | null; created_at: string }>;
+      booth_rent_charges: TableShape<{ id: string; barber_id: string; period_start: string; period_end: string; amount_cents: number; status: RentChargeStatus; stripe_invoice_id: string | null; paid_at: string | null; created_at: string }>;
     };
-    Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Views: Record<string, { Row: Record<string, unknown>; Relationships: [] }>;
+    Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>;
     Enums: {
       user_role: UserRole;
       tenant_plan: TenantPlan;
@@ -170,5 +184,6 @@ export interface Database {
       rent_period: RentPeriod;
       rent_charge_status: RentChargeStatus;
     };
+    CompositeTypes: Record<string, never>;
   };
 }
