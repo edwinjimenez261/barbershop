@@ -69,9 +69,11 @@ class Store {
     this.listeners.forEach((l) => l(this.state));
   }
 
-  subscribe(l: Listener) {
+  subscribe(l: Listener): () => void {
     this.listeners.add(l);
-    return () => this.listeners.delete(l);
+    return () => {
+      this.listeners.delete(l);
+    };
   }
 }
 
