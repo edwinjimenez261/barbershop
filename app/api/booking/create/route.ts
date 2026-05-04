@@ -3,7 +3,29 @@ import { z } from 'zod';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createDepositPaymentIntent } from '@/lib/stripe/connect';
 import { notify } from '@/lib/notify';
-import { resolveTenantByHost } from '@/lib/tenant';
+import { parseHost } from '@/lib/tenant-host';
+import { mockTenant } from '@/lib/mock-data';
+import type { Tenant } from '@/lib/types/database';
+
+async function resolveTenant(host: string): Promise<Tenant | null> {
+  const usingMock =
+    process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true' ||
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (usingMock) return mockTenant;
+  const { rootHost } = parseHost(host);
+  try {
+    const supabase = createSupabaseAdminClient();
+    const { data } = await supabase
+      .from('tenants')
+      .select('*')
+      .eq('custom_domain', rootHost)
+      .maybeSingle();
+    return (data as Tenant | null) ?? null;
+  } catch {
+    return null;
+  }
+}
 
 const Body = z.object({
   barberId: z.string().uuid(),
@@ -26,10 +48,13 @@ export async function POST(req: NextRequest) {
   }
 
   const host = req.headers.get('host') ?? '';
-  const { tenant } = await resolveTenantByHost(host);
+  const tenant = await resolveTenant(host);
   if (!tenant) return NextResponse.json({ error: 'tenant_not_found' }, { status: 404 });
 
-  const usingMock = process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true';
+  const usingMock =
+    process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true' ||
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (usingMock) {
     // Just return success without persisting; the UI handles it.
@@ -39,36 +64,38 @@ export async function POST(req: NextRequest) {
   const supabase = createSupabaseAdminClient();
 
   // 1. Upsert client
-  const { data: existingClient } = await supabase
+  const existingRes = await supabase
     .from('clients')
     .select('id')
     .eq('tenant_id', tenant.id)
     .eq('phone', body.phone)
     .maybeSingle();
+  const existingClient = existingRes.data as { id: string } | null;
 
   let clientId = existingClient?.id;
   if (!clientId) {
-    const { data: newClient, error: cErr } = await supabase
+    const newRes = await supabase
       .from('clients')
       .insert({ tenant_id: tenant.id, name: body.name, phone: body.phone, preferred_locale: body.locale })
       .select('id')
       .single();
-    if (cErr) return NextResponse.json({ error: cErr.message }, { status: 500 });
-    clientId = newClient.id;
+    if (newRes.error) return NextResponse.json({ error: newRes.error.message }, { status: 500 });
+    clientId = (newRes.data as { id: string }).id;
   }
 
   // 2. Compute end_at from service duration
-  const { data: svc } = await supabase
+  const svcRes = await supabase
     .from('services_catalog')
     .select('duration_min')
     .eq('id', body.serviceId)
     .single();
+  const svc = svcRes.data as { duration_min: number } | null;
   if (!svc) return NextResponse.json({ error: 'service_not_found' }, { status: 404 });
   const start = new Date(body.startAt);
   const end = new Date(start.getTime() + svc.duration_min * 60_000);
 
   // 3. Insert appointment (status pending until deposit captured)
-  const { data: appt, error: aErr } = await supabase
+  const apptRes = await supabase
     .from('appointments')
     .insert({
       tenant_id: tenant.id,
@@ -86,16 +113,20 @@ export async function POST(req: NextRequest) {
     })
     .select('id')
     .single();
-  if (aErr) return NextResponse.json({ error: aErr.message }, { status: 500 });
+  if (apptRes.error) return NextResponse.json({ error: apptRes.error.message }, { status: 500 });
+  const appt = apptRes.data as { id: string };
 
   // 4. Create Stripe PaymentIntent if deposit > 0 and barber has Connect account
   let clientSecret: string | null = null;
   if (body.depositCents > 0) {
-    const { data: barber } = await supabase
+    const barberRes = await supabase
       .from('barbers')
       .select('stripe_account_id, stripe_charges_enabled, full_name')
       .eq('id', body.barberId)
       .single();
+    const barber = barberRes.data as
+      | { stripe_account_id: string | null; stripe_charges_enabled: boolean; full_name: string }
+      | null;
 
     if (barber?.stripe_account_id && barber.stripe_charges_enabled) {
       const intent = await createDepositPaymentIntent({

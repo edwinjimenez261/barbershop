@@ -3,6 +3,11 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales, type Locale } from '@/i18n';
 
+// Multi-tenant SaaS: every page reads `host` and middleware-set headers via
+// getCurrentTenant(), so static prerendering at build time is not possible.
+// Force dynamic rendering for all locale-scoped routes.
+export const dynamic = 'force-dynamic';
+
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }

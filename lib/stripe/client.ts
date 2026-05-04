@@ -11,7 +11,7 @@ export function getStripeClient(): Stripe {
     throw new Error('STRIPE_SECRET_KEY is not set');
   }
   return new Stripe(key, {
-    apiVersion: '2024-11-20.acacia',
+    apiVersion: '2025-02-24.acacia',
     typescript: true,
     appInfo: { name: 'getbarber.app', version: '0.1.0' },
   });

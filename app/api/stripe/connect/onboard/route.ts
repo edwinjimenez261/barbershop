@@ -13,11 +13,14 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
 
   const admin = createSupabaseAdminClient();
-  const { data: barber } = await admin
+  const barberRes = await admin
     .from('barbers')
     .select('id, full_name, stripe_account_id')
     .eq('user_id', user.id)
     .single();
+  const barber = barberRes.data as
+    | { id: string; full_name: string; stripe_account_id: string | null }
+    | null;
 
   if (!barber) return NextResponse.json({ error: 'not_a_barber' }, { status: 403 });
 

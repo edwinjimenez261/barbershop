@@ -1,11 +1,13 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import type { Database } from '@/lib/types/database';
 
+// NOTE: We intentionally don't pass a Database generic here. supabase-js@2.49+
+// expects a specific GenericSchema shape (incl. __InternalSupabase). Read sites
+// that need typed rows cast the result explicitly.
 export function createSupabaseServerClient() {
   const cookieStore = cookies();
 
-  return createServerClient<Database>(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
