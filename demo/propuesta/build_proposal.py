@@ -61,11 +61,11 @@ def page_bg(canv, doc):
               LETTER[0] - 0.6 * inch, LETTER[1] - 0.6 * inch)
     canv.setFont("Helvetica-Bold", 9)
     canv.setFillColor(GOLD)
-    canv.drawString(0.6 * inch, LETTER[1] - 0.45 * inch, "GETBARBER.APP")
+    canv.drawString(0.6 * inch, LETTER[1] - 0.45 * inch, "PROPUESTA")
     canv.setFillColor(MUTED)
     canv.setFont("Helvetica", 9)
     canv.drawRightString(LETTER[0] - 0.6 * inch, LETTER[1] - 0.45 * inch,
-                         "Propuesta - Styles Barbershop 2")
+                         "Styles Barbershop 2")
     canv.setStrokeColor(DIVIDER)
     canv.setLineWidth(0.5)
     canv.line(0.6 * inch, 0.55 * inch,
@@ -73,7 +73,7 @@ def page_bg(canv, doc):
     canv.setFillColor(MUTED)
     canv.setFont("Helvetica", 8.5)
     canv.drawString(0.6 * inch, 0.38 * inch,
-                    "Edwin Jimenez - getbarber.app - hola@getbarber.app")
+                    "Edwin Jimenez - infinityproai@gmail.com")
     canv.drawRightString(LETTER[0] - 0.6 * inch, 0.38 * inch,
                          f"Pag. {doc.page}")
     canv.restoreState()
@@ -92,7 +92,7 @@ def cover_bg(canv, doc):
               0.6 * inch, LETTER[1] - 1.8 * inch)
     canv.setFillColor(INK)
     canv.setFont("Helvetica-Bold", 14)
-    canv.drawString(0.18 * inch, LETTER[1] - 1.0 * inch, "GB")
+    canv.drawString(0.22 * inch, LETTER[1] - 1.0 * inch, "SB")
     canv.setFillColor(MUTED)
     canv.setFont("Helvetica", 9)
     canv.drawString(0.8 * inch, 0.45 * inch,
@@ -139,7 +139,7 @@ def build():
         leftMargin=0.6 * inch, rightMargin=0.6 * inch,
         topMargin=0.85 * inch, bottomMargin=0.7 * inch,
         title="Propuesta - Styles Barbershop 2",
-        author="Edwin Jimenez - getbarber.app",
+        author="Edwin Jimenez",
     )
     frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height,
                   id="normal", leftPadding=0, rightPadding=0,
@@ -167,7 +167,7 @@ def build():
     info = Table([
         ["Preparado para:", "Styles Barbershop 2"],
         ["Direccion:", "49 Warwick St, Newark, NJ"],
-        ["Preparado por:", "Edwin Jimenez - getbarber.app"],
+        ["Preparado por:", "Edwin Jimenez"],
         ["Fecha:", date.today().strftime("%d / %m / %Y")],
         ["Validez de la oferta:", "30 dias"],
     ], colWidths=[1.7 * inch, 3.8 * inch])
@@ -267,82 +267,55 @@ def build():
         story.append(two_col(l, r))
         story.append(Spacer(1, 10))
 
-    # ---------- 4. STACK ----------
+    # ---------- 4. CRONOGRAMA ----------
     story.append(PageBreak())
-    story.append(Paragraph("4. Como lo vamos a construir", H2))
+    story.append(Paragraph("4. Cronograma de entrega", H2))
     story.append(hr())
     story.append(Spacer(1, 6))
-    story.append(Paragraph(
-        "Tecnologia <b>de nivel empresarial</b> - el mismo stack que usan "
-        "startups de Silicon Valley, pero aplicado al barrio:",
-        BODY))
-    stack = [
-        ["Componente", "Tecnologia", "Por que"],
-        ["Web + Apps", "Next.js 14 + Tailwind",
-         "Carga en menos de 1 segundo, SEO listo."],
-        ["Base de datos", "Supabase (Postgres)",
-         "Seguridad por barberia, backups diarios."],
-        ["Pagos", "Stripe Connect",
-         "El barbero recibe directo. Cumple con IRS."],
-        ["Mensajeria", "Twilio WhatsApp + SMS",
-         "Numero verificado por Meta."],
-        ["Hosting", "Vercel", "99.99% uptime, CDN mundial."],
-    ]
-    t = Table(stack, colWidths=[1.4 * inch, 1.7 * inch, 3.4 * inch])
-    t.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, 0), GOLD),
-        ("TEXTCOLOR", (0, 0), (-1, 0), INK),
-        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-        ("FONTSIZE", (0, 0), (-1, -1), 10),
-        ("TEXTCOLOR", (0, 1), (-1, -1), TEXT),
-        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [INK_ELEV, INK]),
-        ("GRID", (0, 0), (-1, -1), 0.4, DIVIDER),
-        ("LEFTPADDING", (0, 0), (-1, -1), 9),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 9),
-        ("TOPPADDING", (0, 0), (-1, -1), 7),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-    ]))
-    story.append(t)
 
-    # ---------- 5. CRONOGRAMA ----------
-    story.append(Paragraph("5. Cronograma de entrega", H2))
-    story.append(hr())
-    story.append(Spacer(1, 6))
+    CELL = ParagraphStyle("CELL", parent=BODY, fontSize=9.5, leading=13,
+                          alignment=TA_LEFT, spaceAfter=0)
+    CELL_BOLD_GOLD = ParagraphStyle("CELLBG", parent=CELL,
+                                    fontName="Helvetica-Bold",
+                                    textColor=GOLD)
+    CELL_TIME = ParagraphStyle("CELLT", parent=CELL, alignment=TA_CENTER)
+    HEAD = ParagraphStyle("HEAD", parent=CELL,
+                          fontName="Helvetica-Bold", textColor=INK,
+                          alignment=TA_LEFT)
+    HEAD_C = ParagraphStyle("HEADC", parent=HEAD, alignment=TA_CENTER)
+
     cron = [
-        ["Fase", "Entregables", "Tiempo"],
-        ["Fase 1 - Fundacion",
-         "Diseno final, dominio, sitio publico, reservas con deposito, "
-         "WhatsApp configurado, los 4 barberos cargados.",
-         "Sem. 1-2"],
-        ["Fase 2 - Portales",
-         "Portal del dueno, portal de cada barbero, recordatorios "
-         "automaticos 24h/2h, galerias.",
-         "Sem. 3-4"],
-        ["Fase 3 - Renta de silla",
-         "Stripe Connect de cada barbero, cobro automatico semanal, reporte "
-         "de pagos para usted.",
-         "Sem. 5"],
-        ["Fase 4 - Lanzamiento",
-         "Migracion de clientes, capacitacion (1h por barbero + 2h con "
-         "usted), QR codes en el local, soporte intensivo de 2 semanas.",
-         "Sem. 6"],
+        [Paragraph("Fase", HEAD),
+         Paragraph("Entregables", HEAD),
+         Paragraph("Tiempo", HEAD_C)],
+        [Paragraph("Fase 1 - Fundacion", CELL_BOLD_GOLD),
+         Paragraph("Diseno final, dominio, sitio publico, reservas con "
+                   "deposito, WhatsApp configurado, los 4 barberos cargados.",
+                   CELL),
+         Paragraph("Sem. 1-2", CELL_TIME)],
+        [Paragraph("Fase 2 - Portales", CELL_BOLD_GOLD),
+         Paragraph("Portal del dueno, portal de cada barbero, recordatorios "
+                   "automaticos 24h/2h, galerias.", CELL),
+         Paragraph("Sem. 3-4", CELL_TIME)],
+        [Paragraph("Fase 3 - Renta de silla", CELL_BOLD_GOLD),
+         Paragraph("Stripe Connect de cada barbero, cobro automatico "
+                   "semanal, reporte de pagos para usted.", CELL),
+         Paragraph("Sem. 5", CELL_TIME)],
+        [Paragraph("Fase 4 - Lanzamiento", CELL_BOLD_GOLD),
+         Paragraph("Migracion de clientes, capacitacion (1h por barbero + "
+                   "2h con usted), QR codes en el local, soporte intensivo "
+                   "de 2 semanas.", CELL),
+         Paragraph("Sem. 6", CELL_TIME)],
     ]
-    t = Table(cron, colWidths=[1.5 * inch, 3.7 * inch, 1.3 * inch])
+    t = Table(cron, colWidths=[1.5 * inch, 3.8 * inch, 1.2 * inch])
     t.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), GOLD),
-        ("TEXTCOLOR", (0, 0), (-1, 0), INK),
-        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-        ("FONTNAME", (0, 1), (0, -1), "Helvetica-Bold"),
-        ("TEXTCOLOR", (0, 1), (0, -1), GOLD),
-        ("TEXTCOLOR", (1, 1), (-1, -1), TEXT),
-        ("FONTSIZE", (0, 0), (-1, -1), 10),
         ("ROWBACKGROUNDS", (0, 1), (-1, -1), [INK_ELEV, INK]),
         ("GRID", (0, 0), (-1, -1), 0.4, DIVIDER),
         ("LEFTPADDING", (0, 0), (-1, -1), 9),
         ("RIGHTPADDING", (0, 0), (-1, -1), 9),
-        ("TOPPADDING", (0, 0), (-1, -1), 8),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 9),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 9),
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
     ]))
     story.append(t)
@@ -351,15 +324,15 @@ def build():
         "<i>Total: <b>6 semanas</b> de la firma al dia del lanzamiento, con "
         "demos al final de cada fase.</i>", MUTED_S))
 
-    # ---------- 6. INVERSION ----------
+    # ---------- 5. INVERSION ----------
     story.append(PageBreak())
-    story.append(Paragraph("6. Inversion - su version", H2))
+    story.append(Paragraph("5. Inversion - su version", H2))
     story.append(hr())
     story.append(Spacer(1, 6))
     story.append(Paragraph(
-        "Para Styles Barbershop 2 (<b>4 barberos</b>) recomiendo el plan "
-        "<b>Studio</b>, que incluye barberos ilimitados, dominio propio, "
-        "WhatsApp, renta de silla automatica y soporte prioritario.",
+        "Plataforma completa para Styles Barbershop 2 (<b>4 barberos</b>) "
+        "con barberos ilimitados, dominio propio, WhatsApp, renta de silla "
+        "automatica y soporte prioritario.",
         BODY))
     story.append(Spacer(1, 8))
 
@@ -369,7 +342,7 @@ def build():
                   "Diseno + desarrollo + dominio + capacitacion + migracion "
                   "+ 2 semanas de soporte intensivo."
                   "</font>", BODY),
-        Paragraph("<b>$1,500</b><br/>"
+        Paragraph("<b>$1,295</b><br/>"
                   "<font size=9 color='#A39E92'>un solo pago</font>",
                   PRICE_BIG),
     ]], colWidths=[4.4 * inch, 2.1 * inch])
@@ -386,13 +359,13 @@ def build():
     story.append(Spacer(1, 12))
 
     monthly = Table([[
-        Paragraph("<b>Plan Studio - mensualidad</b><br/>"
+        Paragraph("<b>Mensualidad</b><br/>"
                   "<font size=9 color='#A39E92'>"
                   "Barberos ilimitados &middot; WhatsApp &middot; renta de "
                   "silla automatica &middot; soporte &middot; hosting "
                   "&middot; SMS y WhatsApp incluidos hasta 1,000/mes."
                   "</font>", BODY),
-        Paragraph("<b>$79/mes</b><br/>"
+        Paragraph("<b>$95/mes</b><br/>"
                   "<font size=9 color='#A39E92'>cancele cuando quiera</font>",
                   PRICE_BIG),
     ]], colWidths=[4.4 * inch, 2.1 * inch])
@@ -421,11 +394,12 @@ def build():
     story.append(Spacer(1, 10))
 
     promo = Table([[Paragraph(
-        "<b>OFERTA DE LANZAMIENTO - cliente piloto</b><br/>"
-        "Por ser el primer cliente de getbarber.app:<br/>"
-        "&bull; Setup: <b>$1,500 &rarr; $750</b> (50% off)<br/>"
-        "&bull; Mensualidad: <b>$79 &rarr; $49/mes los primeros 6 meses</b><br/>"
-        "&bull; Su logo y testimonio en getbarber.app por 1 ano.",
+        "<b>PRECIO FAMILIA</b><br/>"
+        "El costo real de un proyecto asi es <b>$1,800 de setup</b> y "
+        "<b>$195/mes</b>. Por ser familia y por la confianza, le dejo:<br/>"
+        "&bull; Setup: <b>$1,800 &rarr; $1,295</b><br/>"
+        "&bull; Mensualidad: <b>$195 &rarr; $95/mes</b><br/>"
+        "Estos precios son exclusivos para Styles Barbershop 2.",
         PROMO_BODY)]], colWidths=[6.5 * inch])
     promo.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), GOLD),
@@ -436,15 +410,15 @@ def build():
     ]))
     story.append(promo)
 
-    # ---------- 7. ROI ----------
+    # ---------- 6. ROI ----------
     story.append(PageBreak())
-    story.append(Paragraph("7. Como se paga solo", H2))
+    story.append(Paragraph("6. Como se paga solo", H2))
     story.append(hr())
     story.append(Spacer(1, 6))
     story.append(Paragraph(
         "Calculo conservador para Styles Barbershop 2 con 4 barberos:", BODY))
     roi = [
-        ["Concepto", "Sin sistema", "Con getbarber.app", "Diferencia"],
+        ["Concepto", "Sin sistema", "Con el sistema", "Diferencia"],
         ["No-shows por semana (estimado)", "8 - 12", "1 - 2", "+$280 - $400"],
         ["Tiempo cobrando renta (semana)", "2 - 3 horas", "0", "+3 horas"],
         ["Reservas fuera de horario", "se pierden", "24/7", "+$150 - $250"],
@@ -473,36 +447,36 @@ def build():
     story.append(t)
     story.append(Spacer(1, 8))
     story.append(Paragraph(
-        "Con la oferta de lanzamiento (<b>$49/mes</b>), el sistema se paga "
-        "solo evitando <b>una sola cita perdida al mes</b>. Todo lo demas es "
-        "ganancia.", BODY))
+        "Con la mensualidad de <b>$95</b>, el sistema se paga solo evitando "
+        "<b>una sola cita perdida al mes</b>. Todo lo demas es ganancia.",
+        BODY))
 
-    # ---------- 8. PROXIMOS PASOS ----------
-    story.append(Paragraph("8. Proximos pasos", H2))
+    # ---------- 7. PROXIMOS PASOS ----------
+    story.append(Paragraph("7. Proximos pasos", H2))
     story.append(hr())
     story.append(Spacer(1, 6))
     for s in [
         "<b>1. Aprobacion verbal</b> - me dice si esta bien y arrancamos.",
-        "<b>2. Adelanto del 50% del setup</b> ($375 con la oferta) - reservo "
-        "el slot de desarrollo.",
+        "<b>2. Adelanto del 50% del setup</b> ($648) - reservo el slot de "
+        "desarrollo.",
         "<b>3. Sesion de kickoff de 1 hora</b> - definimos colores finales, "
         "fotos, servicios y precios.",
         "<b>4. Demo de la Fase 1</b> a las 2 semanas - usted prueba el sitio "
         "antes de pagar el resto.",
-        "<b>5. Saldo del setup</b> al lanzar ($375).",
-        "<b>6. Mensualidad</b> empieza el dia del lanzamiento ($49/mes).",
+        "<b>5. Saldo del setup</b> al lanzar ($647).",
+        "<b>6. Mensualidad</b> empieza el dia del lanzamiento ($95/mes).",
     ]:
         story.append(Paragraph(f"&bull; {s}", BULLET))
 
     story.append(Spacer(1, 16))
     sign = Table([
         [Paragraph("<b>Acepto la propuesta</b>", H3),
-         Paragraph("<b>Por getbarber.app</b>", H3)],
+         Paragraph("<b>Por el desarrollador</b>", H3)],
         [Paragraph("_______________________________<br/><br/>"
                    "Nombre y firma - Styles Barbershop 2<br/>"
                    "Fecha: ____ / ____ / 2026", BODY),
          Paragraph("_______________________________<br/><br/>"
-                   "Edwin Jimenez - Fundador<br/>"
+                   "Edwin Jimenez<br/>"
                    "Fecha: ____ / ____ / 2026", BODY)],
     ], colWidths=[3.25 * inch, 3.25 * inch])
     sign.setStyle(TableStyle([
@@ -515,9 +489,9 @@ def build():
 
     story.append(Spacer(1, 18))
     story.append(Paragraph(
-        "&iquest;Preguntas? Edwin Jimenez &middot; hola@getbarber.app "
-        "&middot; WhatsApp directo. Esta propuesta es valida por 30 dias "
-        "desde la fecha de la portada.", MUTED_S))
+        "&iquest;Preguntas? Edwin Jimenez &middot; WhatsApp directo. Esta "
+        "propuesta es valida por 30 dias desde la fecha de la portada.",
+        MUTED_S))
 
     doc.build(story)
     print(f"OK: {OUTPUT}")
