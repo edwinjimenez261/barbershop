@@ -73,7 +73,7 @@ def page_bg(canv, doc):
     canv.setFillColor(MUTED)
     canv.setFont("Helvetica", 8.5)
     canv.drawString(0.6 * inch, 0.38 * inch,
-                    "Edwin Jimenez - infinityproai@gmail.com")
+                    "Edwin Jimenez | infinityproai.com")
     canv.drawRightString(LETTER[0] - 0.6 * inch, 0.38 * inch,
                          f"Pag. {doc.page}")
     canv.restoreState()
@@ -201,10 +201,10 @@ def build():
         BODY))
     story.append(Paragraph(
         "El cliente reserva en menos de 60 segundos desde su telefono, paga un "
-        "deposito del 25% que va <b>directo a la cuenta del barbero</b> via "
-        "Stripe, y recibe confirmacion y recordatorios por <b>WhatsApp</b>. "
-        "Usted ve el negocio entero desde un panel y la renta semanal se "
-        "cobra sola.",
+        "deposito del 25% que va <b>directo a la cuenta del barbero</b> "
+        "(opcional - se puede activar despues), y recibe confirmacion y "
+        "recordatorios por <b>WhatsApp</b>. Usted ve el negocio entero desde "
+        "un panel y la renta semanal se cobra sola.",
         BODY))
 
     # ---------- 2. PROBLEMA ----------
@@ -232,26 +232,27 @@ def build():
     story.append(Spacer(1, 6))
     cards = [
         ("Sitio publico de la barberia",
-         "Web propia bajo <b>stylesbarbershop2.com</b> con galeria, los 4 "
+         "Web propia bajo <b>stylesbarbershop2.com</b> con galeria, todos los "
          "barberos, servicios, precios, resenas y boton grande de Reservar. "
          "Disenado en negro y dorado, mobile-first."),
         ("Reserva en 5 pasos",
          "Servicio &rarr; Barbero &rarr; Fecha/Hora &rarr; Datos &rarr; "
-         "Deposito. El cliente termina en menos de un minuto, sin crear cuenta."),
-        ("Pago directo al barbero",
-         "Cada barbero conecta su Stripe en 3 minutos. El deposito del 25% "
-         "cae en SU banco - usted nunca toca ese dinero. Cumple con la "
-         "realidad de booth rental."),
-        ("Renta de silla automatica",
-         "Usted define cuanto paga cada barbero (semanal o mensual). Stripe "
-         "cobra solo, deposita a su cuenta, y registra todo. Se acabo el "
-         "viernes de andar pidiendo."),
+         "Confirmacion. El cliente termina en menos de un minuto, sin crear "
+         "cuenta."),
+        ("Pago directo al barbero (opcional)",
+         "Si lo activa, cada barbero conecta su cuenta de pagos en 3 minutos "
+         "y el deposito del 25% cae en SU banco - usted nunca toca ese "
+         "dinero. Si no, la cita queda confirmada sin deposito."),
+        ("Renta de silla automatica (opcional)",
+         "Usted define cuanto paga cada barbero (semanal o mensual). El "
+         "cobro se hace solo y deposita a su cuenta. Se acabo el viernes de "
+         "andar pidiendo. Tambien se puede manejar manual si prefiere."),
         ("WhatsApp + SMS bilingue",
          "Confirmacion al instante, recordatorio 24h y 2h antes. Si WhatsApp "
          "falla, cae a SMS automaticamente. El cliente cambia de idioma "
          "respondiendo &lsquo;EN&rsquo; o &lsquo;ES&rsquo;."),
         ("Portal del dueno",
-         "Calendario maestro de los 4 barberos, ingresos del dia/semana/mes, "
+         "Calendario maestro de todos los barberos, ingresos del dia/semana/mes, "
          "estado de la renta de cada silla, alertas de no-show, y exportacion "
          "a Excel/PDF para el contador."),
         ("Portal de cada barbero",
@@ -290,16 +291,17 @@ def build():
          Paragraph("Tiempo", HEAD_C)],
         [Paragraph("Fase 1 - Fundacion", CELL_BOLD_GOLD),
          Paragraph("Diseno final, dominio, sitio publico, reservas con "
-                   "deposito, WhatsApp configurado, los 4 barberos cargados.",
-                   CELL),
+                   "deposito (opcional), WhatsApp configurado, barberos "
+                   "cargados.", CELL),
          Paragraph("Sem. 1-2", CELL_TIME)],
         [Paragraph("Fase 2 - Portales", CELL_BOLD_GOLD),
          Paragraph("Portal del dueno, portal de cada barbero, recordatorios "
                    "automaticos 24h/2h, galerias.", CELL),
          Paragraph("Sem. 3-4", CELL_TIME)],
-        [Paragraph("Fase 3 - Renta de silla", CELL_BOLD_GOLD),
-         Paragraph("Stripe Connect de cada barbero, cobro automatico "
-                   "semanal, reporte de pagos para usted.", CELL),
+        [Paragraph("Fase 3 - Renta de silla<br/>(opcional)", CELL_BOLD_GOLD),
+         Paragraph("Conexion de pagos de cada barbero, cobro automatico "
+                   "semanal y reporte de pagos para usted. Solo si decide "
+                   "activarlo.", CELL),
          Paragraph("Sem. 5", CELL_TIME)],
         [Paragraph("Fase 4 - Lanzamiento", CELL_BOLD_GOLD),
          Paragraph("Migracion de clientes, capacitacion (1h por barbero + "
@@ -330,9 +332,9 @@ def build():
     story.append(hr())
     story.append(Spacer(1, 6))
     story.append(Paragraph(
-        "Plataforma completa para Styles Barbershop 2 (<b>4 barberos</b>) "
-        "con barberos ilimitados, dominio propio, WhatsApp, renta de silla "
-        "automatica y soporte prioritario.",
+        "Plataforma completa para Styles Barbershop 2 con <b>barberos "
+        "ilimitados</b>, dominio propio, WhatsApp, renta de silla "
+        "automatica (opcional) y soporte prioritario.",
         BODY))
     story.append(Spacer(1, 8))
 
@@ -365,9 +367,7 @@ def build():
                   "silla automatica &middot; soporte &middot; hosting "
                   "&middot; SMS y WhatsApp incluidos hasta 1,000/mes."
                   "</font>", BODY),
-        Paragraph("<b>$95/mes</b><br/>"
-                  "<font size=9 color='#A39E92'>cancele cuando quiera</font>",
-                  PRICE_BIG),
+        Paragraph("<b>$95/mes</b>", PRICE_BIG),
     ]], colWidths=[4.4 * inch, 2.1 * inch])
     monthly.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), INK_ELEV),
@@ -386,8 +386,8 @@ def build():
         "<b>0% comision</b> sobre los pagos de los clientes - el dinero del "
         "barbero es del barbero.",
         "<b>0%</b> de la renta de silla - lo que pague el barbero le llega "
-        "completo a usted (menos la comision de Stripe del 2.9%, que es de "
-        "Stripe, no nuestra).",
+        "completo a usted (menos la comision del procesador de pagos del "
+        "2.9% si activa el cobro automatico).",
         "<b>Sin contrato anual</b> - si no le sirve, cancela y listo.",
     ]:
         story.append(Paragraph(f"&bull; {b}", BULLET))
@@ -416,7 +416,7 @@ def build():
     story.append(hr())
     story.append(Spacer(1, 6))
     story.append(Paragraph(
-        "Calculo conservador para Styles Barbershop 2 con 4 barberos:", BODY))
+        "Calculo conservador para Styles Barbershop 2:", BODY))
     roi = [
         ["Concepto", "Sin sistema", "Con el sistema", "Diferencia"],
         ["No-shows por semana (estimado)", "8 - 12", "1 - 2", "+$280 - $400"],
@@ -476,7 +476,7 @@ def build():
                    "Nombre y firma - Styles Barbershop 2<br/>"
                    "Fecha: ____ / ____ / 2026", BODY),
          Paragraph("_______________________________<br/><br/>"
-                   "Edwin Jimenez<br/>"
+                   "Edwin Jimenez | infinityproai.com<br/>"
                    "Fecha: ____ / ____ / 2026", BODY)],
     ], colWidths=[3.25 * inch, 3.25 * inch])
     sign.setStyle(TableStyle([
@@ -487,11 +487,21 @@ def build():
     ]))
     story.append(sign)
 
-    story.append(Spacer(1, 18))
-    story.append(Paragraph(
-        "&iquest;Preguntas? Edwin Jimenez &middot; WhatsApp directo. Esta "
-        "propuesta es valida por 30 dias desde la fecha de la portada.",
-        MUTED_S))
+    story.append(Spacer(1, 12))
+    note = Table([[Paragraph(
+        "<b>Para comenzar se necesita el 50% de adelanto del setup "
+        "($648).</b> Una vez recibido, agendamos el kickoff y arrancamos "
+        "con la Fase 1. &iquest;Preguntas? Edwin Jimenez | infinityproai.com "
+        "&middot; WhatsApp directo. Propuesta valida por 30 dias.",
+        PROMO_BODY)]], colWidths=[6.5 * inch])
+    note.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), GOLD),
+        ("LEFTPADDING", (0, 0), (-1, -1), 16),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 16),
+        ("TOPPADDING", (0, 0), (-1, -1), 12),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+    ]))
+    story.append(note)
 
     doc.build(story)
     print(f"OK: {OUTPUT}")
