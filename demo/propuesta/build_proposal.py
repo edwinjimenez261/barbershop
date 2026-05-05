@@ -9,9 +9,16 @@ from reportlab.lib.units import inch
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT, TA_JUSTIFY
 from reportlab.platypus import (
     BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Table,
-    TableStyle, PageBreak, NextPageTemplate
+    TableStyle, PageBreak, NextPageTemplate, Image
 )
+from reportlab.lib.utils import ImageReader
 from datetime import date
+import os
+
+LOGO_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "public", "image_2026-05-04_200322694-Photoroom.png"
+)
 
 INK = colors.HexColor("#0B0B0D")
 INK_ELEV = colors.HexColor("#15161A")
@@ -59,9 +66,14 @@ def page_bg(canv, doc):
     canv.setLineWidth(1.2)
     canv.line(0.6 * inch, LETTER[1] - 0.6 * inch,
               LETTER[0] - 0.6 * inch, LETTER[1] - 0.6 * inch)
+    if os.path.exists(LOGO_PATH):
+        canv.drawImage(LOGO_PATH,
+                       0.6 * inch, LETTER[1] - 0.55 * inch,
+                       width=0.42 * inch, height=0.42 * inch,
+                       mask='auto', preserveAspectRatio=True)
     canv.setFont("Helvetica-Bold", 9)
     canv.setFillColor(GOLD)
-    canv.drawString(0.6 * inch, LETTER[1] - 0.45 * inch, "PROPUESTA")
+    canv.drawString(1.1 * inch, LETTER[1] - 0.45 * inch, "PROPUESTA")
     canv.setFillColor(MUTED)
     canv.setFont("Helvetica", 9)
     canv.drawRightString(LETTER[0] - 0.6 * inch, LETTER[1] - 0.45 * inch,
@@ -83,16 +95,18 @@ def cover_bg(canv, doc):
     canv.saveState()
     canv.setFillColor(INK)
     canv.rect(0, 0, LETTER[0], LETTER[1], fill=1, stroke=0)
-    canv.setFillColor(GOLD)
-    canv.rect(0, LETTER[1] - 1.6 * inch, 1.2 * inch, 1.6 * inch,
-              fill=1, stroke=0)
     canv.setStrokeColor(GOLD)
     canv.setLineWidth(2)
     canv.line(0.6 * inch, 0.6 * inch,
               0.6 * inch, LETTER[1] - 1.8 * inch)
-    canv.setFillColor(INK)
-    canv.setFont("Helvetica-Bold", 14)
-    canv.drawString(0.22 * inch, LETTER[1] - 1.0 * inch, "SB")
+    if os.path.exists(LOGO_PATH):
+        logo_w = 2.6 * inch
+        logo_h = 2.6 * inch
+        canv.drawImage(LOGO_PATH,
+                       LETTER[0] - 0.6 * inch - logo_w,
+                       LETTER[1] - 0.6 * inch - logo_h,
+                       width=logo_w, height=logo_h,
+                       mask='auto', preserveAspectRatio=True)
     canv.setFillColor(MUTED)
     canv.setFont("Helvetica", 9)
     canv.drawString(0.8 * inch, 0.45 * inch,
@@ -399,7 +413,9 @@ def build():
         "<b>$195/mes</b>. Por ser familia y por la confianza, le dejo:<br/>"
         "&bull; Setup: <b>$1,800 &rarr; $1,295</b><br/>"
         "&bull; Mensualidad: <b>$195 &rarr; $95/mes</b><br/>"
-        "Estos precios son exclusivos para Styles Barbershop 2.",
+        "Estos precios son exclusivos para Styles Barbershop 2.<br/><br/>"
+        "<b>Para arrancar se necesita el 50% de adelanto del setup "
+        "($648).</b> El otro 50% se paga al lanzar.",
         PROMO_BODY)]], colWidths=[6.5 * inch])
     promo.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), GOLD),
